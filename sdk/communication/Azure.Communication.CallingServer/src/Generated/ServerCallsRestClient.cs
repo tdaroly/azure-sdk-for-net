@@ -31,7 +31,7 @@ namespace Azure.Communication.CallingServer
         /// <param name="pipeline"> The HTTP pipeline for sending and receiving REST requests and responses. </param>
         /// <param name="endpoint"> The endpoint of the Azure Communication resource. </param>
         /// <param name="apiVersion"> Api Version. </param>
-        /// <exception cref="ArgumentNullException"> <paramref name="clientDiagnostics"/>, <paramref name="pipeline"/>, <paramref name="endpoint"/> or <paramref name="apiVersion"/> is null. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="endpoint"/> or <paramref name="apiVersion"/> is null. </exception>
         public ServerCallsRestClient(ClientDiagnostics clientDiagnostics, HttpPipeline pipeline, string endpoint, string apiVersion = "2021-08-30-preview")
         {
             ClientDiagnostics = clientDiagnostics ?? throw new ArgumentNullException(nameof(clientDiagnostics));
@@ -200,7 +200,7 @@ namespace Azure.Communication.CallingServer
             }
         }
 
-        internal HttpMessage CreateStartRecordingRequest(string serverCallId, string recordingStateCallbackUri, RecordingContent? recordingContentType, RecordingChannel? recordingChannelType, RecordingFormat? recordingFormatType)
+        internal HttpMessage CreateStartRecordingRequest(string serverCallId, string recordingStateCallbackUri, RecordingContent? recordingContentType, RecordingChannel? recordingChannelType, RecordingFormat? recordingFormatType, RecordingStorageType? recordingStorageType = null)
         {
             var message = _pipeline.CreateMessage();
             var request = message.Request;
@@ -219,7 +219,8 @@ namespace Azure.Communication.CallingServer
                 RecordingStateCallbackUri = recordingStateCallbackUri,
                 RecordingContentType = recordingContentType,
                 RecordingChannelType = recordingChannelType,
-                RecordingFormatType = recordingFormatType
+                RecordingFormatType = recordingFormatType,
+                RecordingStorageType = recordingStorageType
             };
             var content = new Utf8JsonRequestContent();
             content.JsonWriter.WriteObjectValue(model);
@@ -233,16 +234,17 @@ namespace Azure.Communication.CallingServer
         /// <param name="recordingContentType"> Optional, audioVideo by default. </param>
         /// <param name="recordingChannelType"> Optional, mixed by default. </param>
         /// <param name="recordingFormatType"> Optional, mp4 by default. </param>
+        /// <param name="recordingStorageType"></param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="serverCallId"/> is null. </exception>
-        public async Task<Response<StartRecordingResult>> StartRecordingAsync(string serverCallId, string recordingStateCallbackUri = null, RecordingContent? recordingContentType = null, RecordingChannel? recordingChannelType = null, RecordingFormat? recordingFormatType = null, CancellationToken cancellationToken = default)
+        public async Task<Response<StartRecordingResult>> StartRecordingAsync(string serverCallId, string recordingStateCallbackUri = null, RecordingContent? recordingContentType = null, RecordingChannel? recordingChannelType = null, RecordingFormat? recordingFormatType = null, RecordingStorageType? recordingStorageType = null, CancellationToken cancellationToken = default)
         {
             if (serverCallId == null)
             {
                 throw new ArgumentNullException(nameof(serverCallId));
             }
 
-            using var message = CreateStartRecordingRequest(serverCallId, recordingStateCallbackUri, recordingContentType, recordingChannelType, recordingFormatType);
+            using var message = CreateStartRecordingRequest(serverCallId, recordingStateCallbackUri, recordingContentType, recordingChannelType, recordingFormatType, recordingStorageType);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
@@ -264,16 +266,17 @@ namespace Azure.Communication.CallingServer
         /// <param name="recordingContentType"> Optional, audioVideo by default. </param>
         /// <param name="recordingChannelType"> Optional, mixed by default. </param>
         /// <param name="recordingFormatType"> Optional, mp4 by default. </param>
+        /// <param name="recordingStorageType"></param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="serverCallId"/> is null. </exception>
-        public Response<StartRecordingResult> StartRecording(string serverCallId, string recordingStateCallbackUri = null, RecordingContent? recordingContentType = null, RecordingChannel? recordingChannelType = null, RecordingFormat? recordingFormatType = null, CancellationToken cancellationToken = default)
+        public Response<StartRecordingResult> StartRecording(string serverCallId, string recordingStateCallbackUri = null, RecordingContent? recordingContentType = null, RecordingChannel? recordingChannelType = null, RecordingFormat? recordingFormatType = null, RecordingStorageType? recordingStorageType = null, CancellationToken cancellationToken = default)
         {
             if (serverCallId == null)
             {
                 throw new ArgumentNullException(nameof(serverCallId));
             }
 
-            using var message = CreateStartRecordingRequest(serverCallId, recordingStateCallbackUri, recordingContentType, recordingChannelType, recordingFormatType);
+            using var message = CreateStartRecordingRequest(serverCallId, recordingStateCallbackUri, recordingContentType, recordingChannelType, recordingFormatType, recordingStorageType);
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {

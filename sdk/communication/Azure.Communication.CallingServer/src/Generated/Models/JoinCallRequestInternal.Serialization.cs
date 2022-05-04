@@ -44,6 +44,38 @@ namespace Azure.Communication.CallingServer
                 }
                 writer.WriteEndArray();
             }
+            if (Optional.IsDefined(CallLocator))
+            {
+                writer.WritePropertyName("callLocator");
+                writer.WriteObjectValue(CallLocator);
+            }
+
+            writer.WriteEndObject();
+        }
+    }
+
+    internal partial class CallLocator : IUtf8JsonSerializable
+    {
+        void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
+        {
+            writer.WriteStartObject();
+
+            if (Optional.IsDefined(ServerCallId))
+            {
+                writer.WritePropertyName("serverCallId");
+                writer.WriteStringValue(ServerCallId);
+            }
+            if (Optional.IsDefined(GroupCallId))
+            {
+                writer.WritePropertyName("groupCallId");
+                writer.WriteStringValue(GroupCallId);
+            }
+            if (Optional.IsDefined(Kind))
+            {
+                writer.WritePropertyName("kind");
+                writer.WriteStringValue(Kind.Value.ToString().ToLowerInvariant());
+            }
+
             writer.WriteEndObject();
         }
     }

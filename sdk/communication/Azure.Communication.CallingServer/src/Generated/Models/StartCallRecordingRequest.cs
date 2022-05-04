@@ -23,5 +23,27 @@ namespace Azure.Communication.CallingServer
         public RecordingChannel? RecordingChannelType { get; set; }
         /// <summary> Optional, mp4 by default. </summary>
         public RecordingFormat? RecordingFormatType { get; set; }
+        /// <summary>  Recording storage type  </summary>
+        public RecordingStorageType? RecordingStorageType { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public CallLocator CallLocator { get; set; }
+    }
+
+    /// <summary>
+    /// Recording storage type
+    /// </summary>
+    public enum RecordingStorageType
+    {
+        /// <summary>
+        /// Normal
+        /// </summary>
+        ACS,
+
+        /// <summary>
+        /// Azure Blob
+        /// </summary>
+        External
     }
 }

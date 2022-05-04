@@ -216,11 +216,12 @@ namespace Azure.Communication.CallingServer
         /// Start recording of the call.
         /// </summary>
         /// <param name="recordingStateCallbackUri">The uri to send state change callbacks.</param>
+        /// <param name="recordingStorageType"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <param name="content">content for recording.</param>
         /// <param name="channel">channel for recording.</param>
         /// <param name="format">format for recording.</param>
-        public virtual async Task<Response<StartRecordingResult>> StartRecordingAsync(Uri recordingStateCallbackUri, RecordingContent? content = null, RecordingChannel? channel = null, RecordingFormat? format = null, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<StartRecordingResult>> StartRecordingAsync(Uri recordingStateCallbackUri, RecordingContent? content = null, RecordingChannel? channel = null, RecordingFormat? format = null, RecordingStorageType? recordingStorageType = null, CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(ServerCall)}.{nameof(StartRecording)}");
             scope.Start();
@@ -232,6 +233,7 @@ namespace Azure.Communication.CallingServer
                     recordingContentType: content,
                     recordingChannelType: channel,
                     recordingFormatType: format,
+                    recordingStorageType: recordingStorageType,
                     cancellationToken: cancellationToken
                     ).ConfigureAwait(false);
             }
@@ -250,7 +252,8 @@ namespace Azure.Communication.CallingServer
         /// <param name="content">content for recording.</param>
         /// <param name="channel">channel for recording.</param>
         /// <param name="format">format for recording.</param>
-        public virtual Response<StartRecordingResult> StartRecording(Uri recordingStateCallbackUri, RecordingContent? content = null, RecordingChannel? channel = null, RecordingFormat? format = null, CancellationToken cancellationToken = default)
+        /// <param name="recordingStorageType">recording stroage type</param>
+        public virtual Response<StartRecordingResult> StartRecording(Uri recordingStateCallbackUri, RecordingContent? content = null, RecordingChannel? channel = null, RecordingFormat? format = null, RecordingStorageType? recordingStorageType = null, CancellationToken cancellationToken = default)
         {
             using DiagnosticScope scope = _clientDiagnostics.CreateScope($"{nameof(ServerCall)}.{nameof(StartRecording)}");
             scope.Start();
@@ -262,6 +265,7 @@ namespace Azure.Communication.CallingServer
                     recordingContentType: content,
                     recordingChannelType: channel,
                     recordingFormatType: format,
+                    recordingStorageType,
                     cancellationToken: cancellationToken
                     );
             }

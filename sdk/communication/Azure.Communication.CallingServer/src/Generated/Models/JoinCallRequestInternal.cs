@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using Azure.Communication;
 using Azure.Core;
 
@@ -36,6 +37,8 @@ namespace Azure.Communication.CallingServer
             RequestedCallEvents = new ChangeTrackingList<EventSubscriptionType>();
         }
 
+        public CallLocator CallLocator { get; set; }
+
         /// <summary> The source of the call. </summary>
         public CommunicationIdentifierModel Source { get; }
         /// <summary> The subject. </summary>
@@ -46,5 +49,80 @@ namespace Azure.Communication.CallingServer
         public IList<MediaType> RequestedMediaTypes { get; }
         /// <summary> The requested call events to subscribe to. </summary>
         public IList<EventSubscriptionType> RequestedCallEvents { get; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    internal partial class CallLocator
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public CallLocator()
+        {
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serverCallId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static CallLocator CreateServerCallLocator(string serverCallId)
+        {
+            if (string.IsNullOrEmpty(serverCallId))
+            {
+                throw new ArgumentException($"Argument {nameof(serverCallId)} cannot be null or empty");
+            }
+
+            return new CallLocator
+            {
+                ServerCallId = serverCallId,
+                Kind = CallLocatorKind.ServerCallLocator
+            };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        internal void Write(Utf8JsonWriter writer)
+        {
+            
+        }
+
+        /// <summary>
+        /// The group call id
+        /// </summary>
+        public string GroupCallId { get; set; }
+
+        /// <summary>
+        /// The server call id.
+        /// </summary>
+        public string ServerCallId { get; set; }
+
+        /// <summary>
+        /// The call locator kind.
+        /// </summary>
+        public CallLocatorKind? Kind { get; set; }
+    }
+
+    /// <summary>
+    /// The call locator kind
+    /// </summary>
+    public enum CallLocatorKind
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        GroupCallLocator,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        ServerCallLocator,
     }
 }

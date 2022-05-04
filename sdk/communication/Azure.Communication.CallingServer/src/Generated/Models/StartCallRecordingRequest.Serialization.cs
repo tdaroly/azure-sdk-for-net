@@ -35,6 +35,16 @@ namespace Azure.Communication.CallingServer
                 writer.WritePropertyName("recordingFormatType");
                 writer.WriteStringValue(RecordingFormatType.Value.ToSerialString());
             }
+            if (Optional.IsDefined(RecordingStorageType))
+            {
+                writer.WritePropertyName("recordingStorageType");
+                writer.WriteStringValue(RecordingStorageType.GetValueOrDefault().ToString().ToLower());
+            }
+            if (Optional.IsDefined(CallLocator))
+            {
+                writer.WritePropertyName("callLocator");
+                writer.WriteObjectValue(CallLocator);
+            }
             writer.WriteEndObject();
         }
     }
