@@ -23,6 +23,9 @@ format-by-name-rules:
   '*Uri': 'Uri'
   '*Uris': 'Uri'
 
+list-exception:
+- /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.NetApp/netAppAccounts/{accountName}/volumeGroups/{volumeGroupName}
+
 rename-rules:
   CPU: Cpu
   CPUs: Cpus
@@ -46,13 +49,6 @@ rename-rules:
   Etag: ETag
 
 directive:
-  - from: NetApp.json
-    where: $.definitions..type
-    transform: >
-      $['x-ms-client-name'] = 'ResourceType';
-      $['x-ms-format'] = 'resource-type';
-  - from: NetApp.json
-    where: $.definitions
-    transform: >
-      $.volumeQuotaRulesProperties.properties.quotaType['x-ms-enum']['name'] = 'QuotaType';
+  - remove-operation: Snapshots_Update
+
 ```
