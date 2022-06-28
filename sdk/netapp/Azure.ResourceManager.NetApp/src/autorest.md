@@ -45,4 +45,14 @@ rename-rules:
   URI: Uri
   Etag: ETag
 
+directive:
+  - from: NetApp.json
+    where: $.definitions..type
+    transform: >
+      $['x-ms-client-name'] = 'ResourceType';
+      $['x-ms-format'] = 'resource-type';
+  - from: NetApp.json
+    where: $.definitions
+    transform: >
+      $.volumeQuotaRulesProperties.properties.quotaType['x-ms-enum']['name'] = 'QuotaType';
 ```
