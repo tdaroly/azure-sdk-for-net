@@ -84,6 +84,7 @@ namespace Microsoft.Azure.WebJobs.Extensions.EventGrid
                 .AddBindingRule<EventGridTriggerAttribute>() // following converters are for EventGridTriggerAttribute only
                 .AddConverter<JToken, string>(jtoken => jtoken.ToString(Formatting.Indented))
                 .AddConverter<JToken, string[]>(jarray => jarray.Select(ar => ar.ToString(Formatting.Indented)).ToArray())
+                .AddConverter<DirectInvokeString, JToken>((directInvokeString) => JToken.Parse(directInvokeString.Value))
                 .AddConverter<JToken, DirectInvokeString>(jtoken => new DirectInvokeString(null))
                 .AddConverter<JToken, EventGridEvent>(jobject => EventGridEvent.Parse(new BinaryData(jobject.ToString()))) // surface the type to function runtime
                 .AddConverter<JToken, EventGridEvent[]>(jobject => EventGridEvent.ParseMany(new BinaryData(jobject.ToString())))

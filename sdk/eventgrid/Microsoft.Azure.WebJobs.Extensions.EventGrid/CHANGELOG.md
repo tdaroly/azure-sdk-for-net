@@ -1,12 +1,14 @@
 # Release History
 
-## 3.3.0-beta.1 (Unreleased)
+## 3.3.0 (Unreleased)
 
 ### Features Added
 
 ### Breaking Changes
 
 ### Bugs Fixed
+
+- EventGrid Trigger execution failed in azure portal.
 
 ### Other Changes
 
